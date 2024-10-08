@@ -59,12 +59,12 @@ def gamebuild(gamefile):
 gamebuild(gamefile)
 
 
-# function that will enable user inputs and map movement
-class Gamerun:
+# class that will enable user inputs and map movement
+class Movement:
     def __init__(self, x, y, mapdict):
         self.mapdict = mapdict
-        self.x = x 
-        self.y = y
+        self.x = x # map width
+        self.y = y # map height 
     def move(self, direction):
         global player_position
         current_x, current_y = self.get_coord(player_position)
@@ -75,7 +75,7 @@ class Gamerun:
         # normal movement
         else:
             if direction == 'north':
-                current_y = (current_y - 1) % self.y
+                current_y = (current_y - 1) % self.y 
             elif direction == 'south':
                 current_y = (current_y + 1) % self.y
             elif direction == 'west':
@@ -101,7 +101,7 @@ class Gamerun:
         return y * self.x + x + 1
 
 # set game run variable for use below
-game_run = Gamerun(int(gameinfo['xsize']), int(gameinfo['ysize']), mapdict)
+move = Movement(int(gameinfo['xsize']), int(gameinfo['ysize']), mapdict)
 
 # init inventory and starting location
 player_position = int(gameinfo['start'])
@@ -115,6 +115,7 @@ print(f"Your goal is to {gameinfo['goal'].lower()}")
 print('')
 print(f"You are {mapdict[str(player_position)]['desc']}")
 
+# 
 while True:
     print('')
     if gameinfo['goalobj'] in mapdict[str(gameinfo['goalloc'])]['obj']:
@@ -172,13 +173,13 @@ while True:
             c1 = cmd_parts[0]
             c2 = cmd_parts[1]
             if c2 == 'north':
-                game_run.move('north')
+                move.move('north')
             elif c2 == 'south':
-                game_run.move('south')
+                move.move('south')
             elif c2 == 'west':
-                game_run.move('west')
+                move.move('west')
             elif c2 == 'east':
-                game_run.move('east')
+                move.move('east')
             else:
                 print('Invalid direction!')
         elif 'talk' in cmd:

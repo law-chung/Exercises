@@ -163,28 +163,38 @@ while True:
             if c1 == 'take': # if taking
                 # if c2 is in current room obj list
                 if c2 in mapdict[str(player_position)]['obj']:
-                    print(f"Added {mapdict[str(player_position)]['obj'][0]}") # print msg
-                    inv.append(mapdict[str(player_position)]['obj'][0]) # add first indexed obj to inventory
-                    del mapdict[str(player_position)]['obj'][0] # remove first indexed obj from room 
-                elif 'hiddenobj' in mapdict[str(player_position)]:
+                    i = 0 # set counter
+                    while i < len(mapdict[str(player_position)]['obj']): # while loop to iterate through obj list
+                        if c2 == mapdict[str(player_position)]['obj'][i]: # if c2 equals obj in i index 
+                            print(f"Added {mapdict[str(player_position)]['obj'][i]}") # print msg
+                            inv.append(mapdict[str(player_position)]['obj'][i]) # add i indexed obj to inventory
+                            del mapdict[str(player_position)]['obj'][i] # remove i indexed obj from room
+                        else: # if c2 isn't at current index
+                            i += 1 # move to next obj in list
+                            pass
+                # if hiddenobj is in the current position dictionary
+                elif 'hiddenobj' in mapdict[str(player_position)]: 
+                    # if c2 is in hiddenobj value
                     if c2 in mapdict[str(player_position)]['hiddenobj']:
                         print(f"Added {mapdict[str(player_position)]['hiddenobj']}")
-                        inv.append(mapdict[str(player_position)]['hiddenobj'])
-                        del mapdict[str(player_position)]['hiddenobj']
+                        inv.append(mapdict[str(player_position)]['hiddenobj']) # add to inv
+                        mapdict[str(player_position)]['hiddenobj']  = '' # remove from room
                 else:
-                    print(f"Can't take {c2}!")
-            elif c1 == 'drop':
-                if c2 in inv:
-                    print(f"Dropped {c2}")
-                    mapdict[str(player_position)]['obj'].append(c2)
-                    inv.remove(c2)
+                    print(f"Can't take {c2}!") # message for invalid c2 
+            elif c1 == 'drop': # if dropping 
+                if c2 in inv: # check to see if c2 is in inv 
+                    print(f"Dropped {c2}") 
+                    mapdict[str(player_position)]['obj'].append(c2) # add to room obj list
+                    inv.remove(c2) # delete from inv list
                 else:
                     print(f"Can't drop {c2}!")
+        # if moving 
         elif 'move' in cmd:
-            cmd_parts = cmd.split()
+            cmd_parts = cmd.split() # split input
             c1 = cmd_parts[0]
             c2 = cmd_parts[1]
-            if c2 == 'north':
+            # use move function in Move class to move directions
+            if c2 == 'north': 
                 move.move('north')
             elif c2 == 'south':
                 move.move('south')
@@ -192,19 +202,22 @@ while True:
                 move.move('west')
             elif c2 == 'east':
                 move.move('east')
-            else:
+            else: # if direction not found print message
                 print('Invalid direction!')
+        # if talking
         elif 'talk' in cmd:
-            cmd_parts = cmd.split()
+            cmd_parts = cmd.split() # split input
             c1 = cmd_parts[0]
             c2 = cmd_parts[1]
+            # if c2 in npc dict keys
             if c2 in npc_dict.keys():
-                if str(player_position) == npc_dict[c2]['loc']:
-                    if npc_dict[c2]['count'] + 2 < len(npc_dict[c2]):
-                        print(npc_dict[c2][str(npc_dict[c2]['count'] + 1)])
-                        npc_dict[c2]['count'] += 1
+                if str(player_position) == npc_dict[c2]['loc']: # if player position is in a npc location
+                    if npc_dict[c2]['count'] + 2 < len(npc_dict[c2]): # checks to see if npc line index is maxed
+                        print(npc_dict[c2][str(npc_dict[c2]['count'] + 1)]) # prints npc counter + 1 for 0-indexing
+                        npc_dict[c2]['count'] += 1 # add 1 to counter
                     else:
-                        print(npc_dict[c2][str(npc_dict[c2]['count'])])
+                        # if not at max line 
+                        print(npc_dict[c2][str(npc_dict[c2]['count'])]) # print c2 indexed npc line 
                 else:
                     pass
         

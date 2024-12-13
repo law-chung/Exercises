@@ -14,6 +14,6 @@ geo_df = pd.read_csv('geodata.csv', index_col = ' ')
 
 # merge city df and geo df 
 
-m_df = pd.merge(teamdf, geo_df, left_on = 'city', right_on = ' ')
+m_df = pd.merge(teamdf, geo_df, left_on='city', right_index=True)
 
 print(m_df)
